@@ -250,6 +250,10 @@ function getDefinedOptions()
  */
 function requireRoot()
 {
+    if (stripos(PHP_OS, 'WIN') === 0) {
+        return; // don't need to check for root privileges on Windows
+    }
+
     global $isRoot;
 
     if (!isset($isRoot) || $isRoot === null) {
