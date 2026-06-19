@@ -288,6 +288,7 @@ if [ "$ENTWARE" == 1 ]; then
 fi
 
 # Docker related tasks
+# IMPORTANT: When something changes on Pi-hole's side, check also loadConfig() function in pihole-updatelists.php
 if [ "$DOCKER" == 1 ]; then
     [ ! -f /usr/bin/php ] && { echo "Missing /usr/bin/php binary - was the 'php' package installed?"; exit 1; }
     [ ! -f /usr/bin/start.sh ] && { echo "Missing /usr/bin/start.sh script - not a Pi-hole container?"; exit 1; }

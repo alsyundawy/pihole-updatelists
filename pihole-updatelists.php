@@ -1073,6 +1073,8 @@ function loadConfig(array $options = [])
         'GIT_BRANCH'              => 'master',
     ];
 
+    $hasDockerFiles = file_exists('/usr/bin/start.sh') && file_exists('/usr/bin/pihole-updatelists.sh');
+
     // Default paths overrides when Entware is detected
     if (file_exists('/opt/etc/opkg.conf') && file_exists('/opt/etc/entware_release')) {
         $config = [
@@ -1080,6 +1082,13 @@ function loadConfig(array $options = [])
             'GRAVITY_DB'  => '/opt/etc/pihole/gravity.db',
             'LOCK_FILE'   => '/opt/var/lock/pihole-updatelists.lock',
             'PIHOLE_CMD'  => '/opt/bin/pihole',
+        ] + $config;
+    }
+
+    // Override default config file path when running inside Docker image
+    if ($hasDockerFiles) {
+        $config = [
+            'CONFIG_FILE' => '/etc/pihole-updatelists/pihole-updatelists.conf',
         ] + $config;
     }
 
@@ -1123,7 +1132,8 @@ function loadConfig(array $options = [])
         }
     }
 
-    if (isset($options['env'])) {
+    // Load config from environment variables if --env option is used or if running inside Docker image
+    if (isset($options['env']) || $hasDockerFiles) {
         $config = loadConfigFromEnvironment($config);
     }
 

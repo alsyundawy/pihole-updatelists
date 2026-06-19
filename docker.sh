@@ -8,8 +8,8 @@ fi
 
 case $1 in
     "config")
-        # Recreate the config file if it doesn't exist
-        if [ ! -f "/etc/pihole-updatelists/pihole-updatelists.conf" ]; then
+        # Create the config file if it doesn't exist
+        if [ ! -f /etc/pihole-updatelists/pihole-updatelists.conf ] && [ -f /etc/pihole-updatelists.conf ]; then
             cp /etc/pihole-updatelists.conf /etc/pihole-updatelists/pihole-updatelists.conf
             echo "  [i] Created /etc/pihole-updatelists/pihole-updatelists.conf"
         fi
@@ -30,7 +30,7 @@ case $1 in
     "run")
         shift # Skip 'run' argument
         # shellcheck disable=SC2086,SC2068
-        /usr/bin/php /usr/local/sbin/pihole-updatelists --config=/etc/pihole-updatelists/pihole-updatelists.conf --env $SCRIPT_ARGS $@
+        /usr/bin/php /usr/local/sbin/pihole-updatelists $SCRIPT_ARGS $@
     ;;
     *)
         echo "Usage: $0 run [ARGS]"
